@@ -6,13 +6,12 @@
 #    By: esouchau <esouchau@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2019/07/20 16:45:18 by esouchau     #+#   ##    ##    #+#        #
-#    Updated: 2019/07/24 14:25:05 by abentoun    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/07/24 21:09:54 by lfourage    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
 
-SRCS 		= ft_fill_map.c ft_find_square.c ft_get_params.c ft_print_sqr.c
-
+SRCS 		= main.c ft_check_map.c ft_get_params.c ft_print_sqr.c ft_putstr.c ft_strlen.c ft_fill_map.c ft_mapcp.c ft_putchar.c ft_strcp.c
 INCLUDE		= libft.h
 
 OBJS 		= ${SRCS:.c=.o}
