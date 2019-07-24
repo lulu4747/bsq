@@ -6,7 +6,7 @@
 /*   By: lfourage <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/07/22 18:41:01 by lfourage     #+#   ##    ##    #+#       */
-/*   Updated: 2019/07/22 22:48:21 by lfourage    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/07/23 23:56:56 by lfourage    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,49 +19,57 @@ int		ft_strlen(char *str)
 	int i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
-	return(i);
+	return (i);
 }
 
-char	*ft_fill_map(char *map, int linelen)
+int		ft_first_line(char *map, int len)
 {
 	int i;
-	int n;
-	char *mpf;
 
 	i = 0;
-	if (!(mpf = malloc((sizeof(char)) * (ft_strlen(map)))))
-		return (NULL);
-	while (map[i])
+	while (i < len)
 	{
-		while (i < linelen)
-		{
-			if (map[i] == '0' || map[i] == '\n')
-				mpf[i] = map[i];
-			else
-				mpf[i] = '1';
-			i++;
-		}
 		if (map[i] == '0' || map[i] == '\n')
-			mpf[i] = map[i];
-		else
+			i++;
+		map[i] = '1';
+		i++;
+	}
+	return (i);
+}
+
+void	ft_end_map(char *map, int len, int i)
+{
+	int n;
+
+	n = 0;
+	while (i < ft_strlen(map) - 1)
+	{
+		if (map[i] == '0' || map[i] == '\n')
+			i++;
+		map[i] = '1';
+		if (map[i - 1] != '\n')
 		{
-			mpf[i] = '1';
-			if (map[i - 1] != '\n')
-			{
-				n = mpf[i - 1];
-				if (mpf[i - linelen] < n)
-					n = mpf[i - linelen];
-				if (mpf[i - linelen - 1] < n)
-					n = mpf[i - linelen - 1];
-				n++;
-				mpf[i] = n;
-			}
+			n = map[i - 1];
+			if (map[i - len] < n)
+				n = map[i - len];
+			if (map[i - len - 1] < n)
+				n = map[i - len - 1];
+			n++;
+			map[i] = n;
 		}
 		i++;
 	}
-	return (mpf);
+}
+
+char	*ft_fill_map(char *map, int len)
+{
+	int i;
+
+	i = ft_first_line(map, len);
+	ft_end_map(map, len, i);
+	return (map);
 }
 
 int		main()

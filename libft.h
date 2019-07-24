@@ -1,14 +1,28 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_find_square.c                                 .::    .:/ .      .::   */
+/*   libft.h                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: lfourage <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*   By: abentoun <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2019/07/22 16:32:45 by lfourage     #+#   ##    ##    #+#       */
-/*   Updated: 2019/07/23 20:30:55 by abentoun    ###    #+. /#+    ###.fr     */
+/*   Created: 2019/07/24 13:05:11 by abentoun     #+#   ##    ##    #+#       */
+/*   Updated: 2019/07/24 17:35:44 by lfourage    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-char	*ft_find_square(char *map, int 
+#ifndef LIBFT_H
+# define LIBFT_H
+
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+typedef struct t_map
+{
+	char *map;
+	int  nline;
+	char empty;
+	char wall;
+	char sqr;
+}    s_smap;
+#endif

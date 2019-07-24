@@ -3,30 +3,46 @@
 /*                                                              /             */
 /*   ft_get_params.c                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: lfourage <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*   By: abentoun <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2019/07/22 16:24:38 by lfourage     #+#   ##    ##    #+#       */
-/*   Updated: 2019/07/22 16:31:34 by lfourage    ###    #+. /#+    ###.fr     */
+/*   Created: 2019/07/24 14:23:01 by abentoun     #+#   ##    ##    #+#       */
+/*   Updated: 2019/07/24 17:44:42 by lfourage    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_get_params.c                                  .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: lfourage <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/07/22 16:24:38 by lfourage     #+#   ##    ##    #+#       */
+/*   Updated: 2019/07/24 13:35:25 by abentoun    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
+#include "libft.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-int  ft_isdigit(int c)
-{
-	return (c >= '0' && c <= '9');
-}
+typedef struct t_map{
+	char *map;	int  nline;
+	char empty;
+	char wall;
+	char sqr;
+}    s_smap;
 
-size_t  ft_strlen(const char *s)
+int		ft_strlen(char *s)
 {
 	int  i;
 
-	i = -1;
+	i = 0;
 	while (s[++i])
 		;
 	return (i);
@@ -39,14 +55,26 @@ void ft_putstr(char *str)
 	write(1, str, ft_strlen(str));
 }
 
-typedef struct t_map
+s_smap	ft_saveparams(s_smap smap, char *tmp)
 {
-	char *map;
-	int  nline;
-	char empty;
-	char wall;
-	char sqr;
-}    s_smap;
+	int c;
+	int i;
+
+	i = 0;
+	smap.nline = 0;
+	c = ft_strlen(tmp) - 4;
+	while (i < c)
+	{
+		smap.nline = smap.nline * 10 + tmp[i] - '0';
+		i++;
+	}
+	smap.empty = tmp[i];
+	i++;
+	smap.wall = tmp[i];
+	i++;
+	smap.sqr = tmp[i];
+	return (smap);
+}
 
 s_smap get_param(char *s)
 {
@@ -56,36 +84,59 @@ s_smap get_param(char *s)
 	int  i;
 	char *tmp;
 
+	i = 0;	
 	fd = open(s, O_RDONLY);
-	if (!(buf = (char *)malloc(sizeof(*buf) * 5)))
+	if (!(buf = malloc(sizeof(char) * 1)))
 		return (smap);
-	read(fd, buf, 5);
-
-	/* attribution of args */
-	if (!((*buf)))
-		return (smap);
-	i = -1;
-	if (!(buf = (char *)malloc(sizeof(*buf) * 5)))
-		return (smap);
-	while (*buf != '\n' && (++i))
+	while (buf[i] != '\n')
 	{
 		read(fd, buf, 1);
-
-		tmp - ft_strnjoin(tmp, buf, 1);
+		if (!(tmp = malloc(sizeof(char) * 1)))
+			return (smap);
+		tmp[i] = buf[0];
+		i++;
 	}
-	read(fd, buf, 5);
-
-	smap.nline = 0;
+	smap = ft_saveparams(smap, tmp);
+	i = 0;
+	free(tmp);
+	while (buf[i] != '\n')
+	{
+		read(fd, buf, 1);
+		if (!(tmp = malloc(sizeof(char) * 1)))
+			return (smap);
+		tmp[i] = buf[0];
+		i++;
+	}
+	free(buf);
+	if (!(buf = malloc(sizeof(char) * i)))
+		return (smap);
+	while (read(fd, buf, i))
+	{
+		if (!(tmp = malloc(sizeof(char) * i)))
+			return (smap);
+		tmp = buf;
+		i++;
+	}
+	if (!(smap.map = malloc(sizeof(char) * ft_strlen(tmp))))
+		return (smap);
+	smap.map = tmp;
+	free(buf);
+	free(tmp);
 	return(smap);
 }
 
 int  main(int ac, char **av)
 {
 	s_smap map;
-
-	map = get_param(av[1]);
-	if (!(ac == 1))
+	int i;
+	i = 1;
+	if (!(ac < 2))
 		return (0);
-	bsq(av[1]);
+	while (i <= ac)
+	{
+		map = get_param(av[i]);
+		i++;
+	}
+	printf("%s", map.map);
 	return(0);
 }
